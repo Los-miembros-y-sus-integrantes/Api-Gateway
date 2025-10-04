@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+        routes:
+        - id: members
+          uri: lb://members-service
+          predicates:
+            - Path=/api/members/** 
+          filters:
+            - StripPrefix=1
+
+        - id: classes
+          uri: lb://classes-service
+          predicates:
+            - Path=/api/classes/** 
+          filters:
+            - StripPrefix=1
+
+        - id: trainers
+          uri: lb://trainers-service
+          predicates:
+            - Path=/api/trainers/** 
+          filters:
+            - StripPrefix=1
+
+        # Ruta especial para agregación de resumen de miembro
+        - id: member-summary
+          uri: no://op  # la gestionará un filtro/handler (ver sección de agregación)
+          predicates:
+            - Path=/api/members/{memberId}/summary
