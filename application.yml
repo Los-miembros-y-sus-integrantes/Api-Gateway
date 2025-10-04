@@ -1,7 +1,6 @@
 spring:
   application:
     name: api-gateway
-    port: 8761
 
   cloud:
     gateway:
@@ -40,3 +39,28 @@ spring:
             - Path=/api/listener/** 
           filters:
             - StripPrefix=1
+
+        # Rutas de Agregación
+        - id: classes-with-trainers
+          uri: no://op
+          predicates:
+            - Path=/api/aggregate/classes-with-trainers
+          filters:
+            - name: AggregatorGatewayFilterFactory
+
+        - id: trainers-with-classes
+          uri: no://op
+          predicates:
+            - Path=/api/aggregate/trainers-with-classes
+          filters:
+            - name: AggregatorGatewayFilterFactory
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: api-gateway
