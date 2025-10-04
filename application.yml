@@ -1,6 +1,7 @@
 spring:
   application:
     name: api-gateway
+    port: 8761
 
   cloud:
     gateway:
@@ -26,8 +27,16 @@ spring:
           filters:
             - StripPrefix=1
 
-        # Ruta especial para agregación de resumen de miembro
-        - id: member-summary
-          uri: no://op  # la gestionará un filtro/handler (ver sección de agregación)
+        - id: equipment
+          uri: lb://equipment-service
           predicates:
-            - Path=/api/members/{memberId}/summary
+            - Path=/api/equipment/** 
+          filters:
+            - StripPrefix=1
+
+        - id: listener
+          uri: lb://listener-service
+          predicates:
+            - Path=/api/listener/** 
+          filters:
+            - StripPrefix=1
