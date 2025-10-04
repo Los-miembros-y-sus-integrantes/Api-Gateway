@@ -6,24 +6,24 @@ spring:
   cloud:
     gateway:
         routes:
-        - id: members
-          uri: lb://members-service
+        - id: member
+          uri: lb://member-service
           predicates:
-            - Path=/api/members/** 
+            - Path=/api/member/** 
           filters:
             - StripPrefix=1
 
-        - id: classes
-          uri: lb://classes-service
+        - id: class
+          uri: lb://class-service
           predicates:
-            - Path=/api/classes/** 
+            - Path=/api/class/** 
           filters:
             - StripPrefix=1
 
-        - id: trainers
-          uri: lb://trainers-service
+        - id: trainer
+          uri: lb://trainer-service
           predicates:
-            - Path=/api/trainers/** 
+            - Path=/api/trainer/** 
           filters:
             - StripPrefix=1
 
