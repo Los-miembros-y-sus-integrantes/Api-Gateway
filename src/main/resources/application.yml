@@ -1,0 +1,73 @@
+server:
+  port: 8086
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: api-gateway
+    
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: member-service
+              uri: lb://member-service
+              predicates:
+                - Path=/api/member/**
+              filters:
+                - StripPrefix=2
+
+            - id: class
+              uri: lb://clases-service
+              predicates:
+                - Path=/api/class/**
+              filters:
+                - StripPrefix=2
+
+            - id: trainer
+              uri: lb://trainer-service
+              predicates:
+                - Path=/api/trainer/**
+              filters:
+                - StripPrefix=2
+
+            - id: equipment
+              uri: lb://equipment-service
+              predicates:
+                - Path=/api/equipment/**
+              filters:
+                - StripPrefix=2
+
+            - id: listener
+              uri: lb://listener-service
+              predicates:
+                - Path=/api/listener/**
+              filters:
+                - StripPrefix=2
+
+# Eureka Client Configuration
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+#    register-with-eureka: true
+#    fetch-registry: true
+#  instance:
+#    hostname: ${EUREKA_INSTANCE:api-gateway}
+#    prefer-ip-address: true
+
+  
+
+# Management endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,eureka
+  endpoint:
+    health:
+      show-details: always
